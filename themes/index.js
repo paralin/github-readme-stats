@@ -321,6 +321,13 @@ export const themes = {
     text_color: "C3D1D9",
     bg_color: "0D1117",
   },
+  github_dark_dimmed: {
+    title_color: "539bf5",
+    icon_color: "539bf5",
+    text_color: "ADBAC7",
+    bg_color: "24292F",
+    border_color: "373E47",
+  },
   discord_old_blurple: {
     title_color: "7289DA",
     icon_color: "7289DA",
@@ -415,6 +422,13 @@ export const themes = {
     icon_color: "5FABEE",
     border_color: "85A4C0",
     bg_color: "030314",
+  },
+  neon: {
+    title_color: "00EAD3",
+    text_color: "FF449F",
+    icon_color: "00EAD3",
+    border_color: "ffffff",
+    bg_color: "000000",
   },
 };
 
