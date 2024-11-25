@@ -1,0 +1,38 @@
+query userInfo($login: String!) {
+  user(login: $login) {
+    # Basic user info
+    login
+    name
+    
+    # Organizations the user belongs to
+    organizations(first: 100) {
+      nodes {
+        login
+      }
+    }
+    
+    # All repositories (both personal and org)
+    repositories(
+      first: 100,
+      ownerAffiliations: [OWNER, ORGANIZATION_MEMBER],
+      orderBy: {direction: DESC, field: STARGAZERS}
+    ) {
+      totalCount
+      nodes {
+        name
+        owner {
+          login
+          __typename
+        }
+        stargazers {
+          totalCount
+        }
+        isPrivate
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
