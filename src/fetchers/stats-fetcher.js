@@ -306,22 +306,22 @@ const fetchStats = async (
   // Retrieve stars while filtering out repositories to be hidden.
   let repoToHide = new Set(exclude_repo);
   
-  logger.log(`Processing ${user.repositories.nodes.length} total repositories`);
+  console.log(`[Stats Fetcher] Processing ${user.repositories.nodes.length} total repositories`);
   
   stats.totalStars = user.repositories.nodes
     .filter((data) => {
       const include = !repoToHide.has(data.name);
       if (!include) {
-        logger.log(`Excluding repository: ${data.name}`);
+        console.log(`[Stats Fetcher] Excluding repository: ${data.name}`);
       }
       return include;
     })
     .reduce((prev, curr) => {
-      logger.log(`Repository ${curr.name} has ${curr.stargazers.totalCount} stars`);
+      console.log(`[Stats Fetcher] Repository ${curr.owner?.login}/${curr.name} has ${curr.stargazers.totalCount} stars`);
       return prev + curr.stargazers.totalCount;
     }, 0);
     
-  logger.log(`Final total stars: ${stats.totalStars}`);
+  console.log(`[Stats Fetcher] Final total stars: ${stats.totalStars}`);
 
   stats.rank = calculateRank({
     all_commits: include_all_commits,
