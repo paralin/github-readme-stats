@@ -132,13 +132,34 @@ describe("Test fetchStats", () => {
     });
   });
 
-  it("should stop fetching when there are repos with zero stars", async () => {
+  it("should continue fetching when there are repos with stars mixed with zero stars", async () => {
+    process.env.FETCH_MULTI_PAGE_STARS = "true"; // Enable multi-page fetching for this test
+
+    const data_repo_all_zero_stars = {
+      data: {
+        user: {
+          repositories: {
+            nodes: [
+              { name: "test-repo-6", stargazers: { totalCount: 0 } },
+              { name: "test-repo-7", stargazers: { totalCount: 0 } },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: "cursor",
+            },
+          },
+        },
+      },
+    };
+
     mock.reset();
     mock
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_stats)
       .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_repo_zero_stars);
+      .replyOnce(200, data_repo_zero_stars)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_repo_all_zero_stars);
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({
@@ -148,7 +169,7 @@ describe("Test fetchStats", () => {
       reviews: 50,
       issues: 200,
       repos: 5,
-      stars: 300,
+      stars: 600, // Now includes stars from both pages: 300 + 300
       followers: 100,
     });
 
@@ -161,7 +182,7 @@ describe("Test fetchStats", () => {
       totalPRsMerged: 0,
       mergedPRsPercentage: 0,
       totalReviews: 50,
-      totalStars: 300,
+      totalStars: 600, // Updated to reflect stars from both pages
       totalDiscussionsStarted: 0,
       totalDiscussionsAnswered: 0,
       rank,

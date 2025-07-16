@@ -150,7 +150,7 @@ const statsFetcher = async ({
     );
     hasNextPage =
       process.env.FETCH_MULTI_PAGE_STARS === "true" &&
-      repoNodes.length === repoNodesWithStars.length &&
+      repoNodesWithStars.length > 0 &&
       res.data.data.user.repositories.pageInfo.hasNextPage;
     endCursor = res.data.data.user.repositories.pageInfo.endCursor;
   }
